@@ -13,11 +13,13 @@ class Arctis7PlusDevice(DeviceManager):
         return 'Arctis Nova 7'
 
     def manage_input_data(self, data: list[int], endpoint: InterfaceEndpoint) -> DeviceState:
-        if endpoint == self.utility_guess_endpoint(7, 'in'):
+        if endpoint == self.utility_guess_endpoint(7, 'in') and len(data) > 2:
             # This probably needs some more work. Taken from original project.
             # see https://github.com/Sapd/HeadsetControl/blob/master/src/devices/steelseries_arctis_7_plus.c#L103
 
             return DeviceState(data[1] / 100, data[2] / 100, 1, 1, DeviceStatus())
+        else:
+            return DeviceStatus(1, 1, 1, 1, DeviceStatus())
 
     def get_endpoint_addresses_to_listen(self) -> list[InterfaceEndpoint]:
         return [self.utility_guess_endpoint(7, 'in')]
